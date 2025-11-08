@@ -8,7 +8,7 @@
 
 #define START_BYTE 0xAA
 #define MAX_DATA 8
-#define USE_2X 0
+#define USE_2X 0 // Can change depending on usage
 
 // ---------- UART ----------
 void UART_init(void) {

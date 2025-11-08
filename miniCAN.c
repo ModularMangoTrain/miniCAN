@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
-#include <stdbool.h>
 #include <until/setbaud.h>
+#include "miniCAN.h"
 
 #define F_CPU 12000000UL
 #define BAUD 57600 
@@ -49,12 +49,6 @@ uint8_t crc8(const uint8_t *data, uint8_t len) {
 }
 
 // ---------- miniCAN ----------
-typedef struct {
-    uint8_t id;
-    uint8_t len;
-    uint8_t data[MAX_DATA];
-    uint8_t crc;
-} MiniCAN_Frame;
 
 void miniCAN_sendFrame(MiniCAN_Frame *f) {
     UART_sendByte(START_BYTE);
@@ -80,26 +74,4 @@ bool miniCAN_receiveFrame(MiniCAN_Frame *f) {
     return (calc_crc == f->crc);
 }
 
-// ---------- Demo ----------
-int main(void) {
-    UART_init();
-
-    MiniCAN_Frame frame;
-    frame.id = 0x10;
-    frame.len = 3;
-    frame.data[0] = 0x11;
-    frame.data[1] = 0x22;
-    frame.data[2] = 0x33;
-    frame.crc = crc8(&frame.id, 2 + frame.len);
-
-    while (1) {
-        miniCAN_sendFrame(&frame);
-        _delay_ms(1000);
-
-        MiniCAN_Frame rx;
-        if (miniCAN_receiveFrame(&rx)) {
-            // Do something with rx frame
-        }
-    }
-}
 

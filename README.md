@@ -34,6 +34,6 @@ Really, it's just my own personal project. I needed something that I would use r
 Compile and flash using `avr-gcc` and `avrdude`:
 
 ```bash
-avr-gcc -mmcu=atmega644p -Os main.c miniCAN.c -o miniCAN.elf
-avr-objcopy -O ihex miniCAN.elf miniCAN.hex
-avrdude -p m644p -c usbasp -U flash:w:miniCAN.hex
+avr-gcc -mmcu=atmega644p -DF_CPU=12000000 -Wall -Os demo.c miniCAN.c -o minican.elf
+avr-objcopy -O ihex minican.elf minican.hex
+avrdude -c usbasp -P usb -p m644p -U flash:w:minican.hex
